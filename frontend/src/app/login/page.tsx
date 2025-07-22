@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { FormInput } from '../../components/form-ui/input';
 import { FieldError } from 'react-hook-form';
+import { LOGIN_TITLE, EMAIL_LABEL, EMAIL_PLACEHOLDER, PASSWORD_LABEL, PASSWORD_PLACEHOLDER, EMAIL_REQUIRED_NOTIFICATION_LABEL, PASSWORD_REQUIRED_NOTIFICATION_LABEL, LOGIN_SUBMIT_LABEL, LOGIN_SUBMIT_LOADING_LABEL, INVALID_LOGIN_NOTIFICATION_LABEL } from '../../constants/constants';
 
 const LoginContainer = styled.div`
   min-width: 400px;
@@ -79,32 +80,32 @@ export default function LoginPage() {
     if (ok) {
       router.push('/');
     } else {
-      setError('E-mail ou senha inválidos');
+      setError(INVALID_LOGIN_NOTIFICATION_LABEL);
     }
   };
 
   return (
     <Container>
       <LoginContainer>
-        <h2>Bem-vindo!</h2>
+        <h2>{LOGIN_TITLE}</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormInput
-            label="Email"
+            label={EMAIL_LABEL}
             type="email"
-            placeholder="Digite seu email"
-            register={register("email", { required: "Email obrigatório" })}
+            placeholder={EMAIL_PLACEHOLDER}
+            register={register("email", { required: EMAIL_REQUIRED_NOTIFICATION_LABEL })}
             error={errors.email as FieldError | undefined}
           />
           <FormInput
-            label="Senha"
+            label={PASSWORD_LABEL}
             type="password"
-            placeholder="Digite sua senha"
-            register={register("senha", { required: "Senha obrigatória" })}
+            placeholder={PASSWORD_PLACEHOLDER}
+            register={register("senha", { required: PASSWORD_REQUIRED_NOTIFICATION_LABEL })}
             error={errors.senha as FieldError | undefined}
           />
           {error && <ErrorMsg>{error}</ErrorMsg>}
           <LoginButton type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Entrando...' : 'Entrar'}
+            {isSubmitting ? LOGIN_SUBMIT_LOADING_LABEL : LOGIN_SUBMIT_LABEL}
           </LoginButton>
         </form>
       </LoginContainer>

@@ -8,6 +8,7 @@ import { useForm, FieldError } from 'react-hook-form';
 import { FormInput } from '../../components/form-ui/input';
 import { FormSelect } from '../../components/form-ui/FormSelect';
 import { Button } from '../../components/form-ui/button';
+import { VISITOR_REGISTRATION_TITLE, CPF_REQUIRED_NOTIFICATION_LABEL, ROOM_REQUIRED_NOTIFICATION_LABEL, NAME_REQUIRED_NOTIFICATION_LABEL, ACTIVE_VISITORS_TITLE, CPF_LABEL, ROOM_LABEL, ENTRY_DATE_LABEL, EMAIL_LABEL, BIRTHDATE_LABEL, REGISTER_BUTTON_LABEL, REGISTER_BUTTON_LOADING_LABEL } from '../../constants/constants';
 
 const Form = styled.form`
   display: flex;
@@ -94,54 +95,54 @@ export default function VisitantesPage() {
 
   return (
     <MasterContainer>
-      <h2>Cadastro de Visitante</h2>
+      <h2>{VISITOR_REGISTRATION_TITLE}</h2>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormInput
           label="Nome"
           placeholder="Nome*"
-          register={register("nome", { required: "Nome obrigatório" })}
+          register={register("nome", { required: NAME_REQUIRED_NOTIFICATION_LABEL })}
           error={errors.nome as FieldError | undefined}
         />
         <FormInput
-          label="CPF"
+          label={CPF_LABEL}
           placeholder="CPF*"
-          register={register("cpf", { required: "CPF obrigatório" })}
+          register={register("cpf", { required: CPF_REQUIRED_NOTIFICATION_LABEL })}
           error={errors.cpf as FieldError | undefined}
         />
         <FormSelect
-          label="Sala destino*"
+          label={ROOM_LABEL}
           options={salas.map((s: any) => ({ value: s.id, label: s.nome }))}
-          register={register("sala_destino_id", { required: "Sala obrigatória" })}
+          register={register("sala_destino_id", { required: ROOM_REQUIRED_NOTIFICATION_LABEL })}
           error={errors.sala_destino_id as FieldError | undefined}
         />
         <FormInput
-          label="Data de nascimento"
+          label={BIRTHDATE_LABEL}
           type="date"
           register={register("data_nascimento")}
           error={errors.data_nascimento as FieldError | undefined}
         />
         <FormInput
-          label="E-mail"
+          label={EMAIL_LABEL}
           type="email"
           register={register("email")}
           error={errors.email as FieldError | undefined}
         />
-        <Button type="submit" disabled={isSubmitting || loading} style={{ minWidth: 120 }}>
-          {isSubmitting || loading ? 'Salvando...' : 'Cadastrar'}
+        <Button type="submit" disabled={isSubmitting || loading}>
+          {isSubmitting || loading ? REGISTER_BUTTON_LOADING_LABEL : REGISTER_BUTTON_LABEL}
         </Button>
       </Form>
       {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
       {success && <div style={{ color: 'green', marginBottom: 12 }}>{success}</div>}
-      <h3>Visitantes Ativos</h3>
+      <h3>{ACTIVE_VISITORS_TITLE}</h3>
       <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 12 }}>
         <thead>
           <tr>
             <th>Nome</th>
-            <th>CPF</th>
-            <th>Sala</th>
-            <th>Data Entrada</th>
-            <th>E-mail</th>
-            <th>Data Nasc.</th>
+            <th>{CPF_LABEL}</th>
+            <th>{ROOM_LABEL}</th>
+            <th>{ENTRY_DATE_LABEL}</th>
+            <th>{EMAIL_LABEL}</th>
+            <th>{BIRTHDATE_LABEL}</th>
             <th>Ações</th>
           </tr>
         </thead>

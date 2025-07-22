@@ -7,6 +7,7 @@ import MasterContainer from '../../components/master-container/master-container'
 import { useForm, FieldError } from 'react-hook-form';
 import { FormInput } from '../../components/form-ui/input';
 import { Button } from '../../components/form-ui/button';
+import { ROOM_REGISTRATION_TITLE, REGISTERED_ROOMS_TITLE, REGISTER_BUTTON_LABEL, REGISTER_BUTTON_LOADING_LABEL } from '../../constants/constants';
 
 const Form = styled.form`
   display: flex;
@@ -64,29 +65,29 @@ export default function SalasPage() {
 
   return (
     <MasterContainer>
-      <h2>Cadastro de Sala</h2>
+      <h2>{ROOM_REGISTRATION_TITLE}</h2>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-        <FormInput
-          label="Nome da sala"
-          placeholder="Nome da sala"
-          register={register("nome", { required: "Nome obrigatório" })}
-          error={errors.nome as FieldError | undefined}
-        />
-     
-        <Button type="submit" disabled={isSubmitting || loading}>
-          {isSubmitting || loading ? 'Salvando...' : 'Cadastrar'}
-        </Button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <FormInput
+            label="Nome da sala"
+            placeholder="Nome da sala"
+            register={register("nome", { required: "Nome obrigatório" })}
+            error={errors.nome as FieldError | undefined}
+          />
+
+          <Button type="submit" disabled={isSubmitting || loading}>
+            {isSubmitting || loading ? REGISTER_BUTTON_LOADING_LABEL : REGISTER_BUTTON_LABEL}
+          </Button>
         </div>
       </Form>
       {error && <ErrorMsg>{error}</ErrorMsg>}
       {success && <SuccessMsg>{success}</SuccessMsg>}
-      <h3>Salas Cadastradas</h3>
+      <h3>{REGISTERED_ROOMS_TITLE}</h3>
       <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 12 }}>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Nome</th>
+            <th>Sala</th>
           </tr>
         </thead>
         <tbody>

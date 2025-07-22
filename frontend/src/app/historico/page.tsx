@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { apiGet } from '../../services/api';
 import styled from 'styled-components';
 import MasterContainer from '../../components/master-container/master-container';
+import { NAME_LABEL, CPF_LABEL, ROOM_LABEL, ENTRY_DATE_LABEL, EXIT_DATE_LABEL, EMAIL_LABEL, BIRTHDATE_LABEL, VISITOR_HISTORY_TITLE } from '../../constants/constants';
 
 const TableWrapper = styled.div`
   width: 100%;
@@ -71,19 +72,19 @@ export default function HistoricoPage() {
 
   return (
     <MasterContainer>
-      <h2>Histórico de Visitantes</h2>
+      <h2>{VISITOR_HISTORY_TITLE}</h2>
       {loading ? <div>Carregando...</div> : (
         <TableWrapper>
           <Table>
             <thead>
               <tr>
-                <th>Nome</th>
-                <th>CPF</th>
-                <th>Sala</th>
-                <th>Data Entrada</th>
-                <th>Data Saída</th>
-                <th>E-mail</th>
-                <th>Data Nasc.</th>
+                <th>{NAME_LABEL}</th>
+                <th>{CPF_LABEL}</th>
+                <th>{ROOM_LABEL}</th>
+                <th>{ENTRY_DATE_LABEL}</th>
+                <th>{EXIT_DATE_LABEL}</th>
+                <th>{EMAIL_LABEL}</th>
+                <th>{BIRTHDATE_LABEL}</th>
               </tr>
             </thead>
             <tbody>

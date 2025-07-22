@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { apiGet } from '../../services/api';
 import MasterContainer from '../../components/master-container/master-container';
+import { LOGS_TITLE } from '../../constants/constants';
 
 interface Log {
   id: number;
@@ -30,7 +31,7 @@ export default function LogsPage() {
 
   return (
     <MasterContainer>
-      <h2>Logs do Sistema</h2>
+      <h2>{LOGS_TITLE}</h2>
       {loading ? <div>Carregando...</div> : (
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 12 }}>
           <thead>
