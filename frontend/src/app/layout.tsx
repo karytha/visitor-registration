@@ -1,14 +1,8 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import StyledComponentsRegistry from '../lib/StyledComponentsRegistry'
-import { AuthProvider } from '../contexts/AuthContext'
 import { TitleGlobalStyle } from '../components/login/login-styles';
+import Providers from '../components/providers/Providers';
 const inter = Inter({ subsets: ['latin'] })
-
-export const metadata = {
-  title: 'Controle de Visitantes',
-  description: 'Sistema de controle de visitantes',
-}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,11 +10,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <TitleGlobalStyle />
       <html lang="pt-BR">
         <body className={inter.className}>
-          <StyledComponentsRegistry>
-            <AuthProvider>
-              {children}
-            </AuthProvider>
-          </StyledComponentsRegistry>
+          <Providers>
+            {children}
+          </Providers>
         </body>
       </html>
     </>

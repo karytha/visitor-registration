@@ -1,90 +1,66 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { apiGet, apiPost, apiPatch } from '../../services/api';
-import { useForm, FieldError } from 'react-hook-form';
-import { ACTIVE_VISITORS_TITLE } from '../../constants/constants';
+import { apiGet, apiPatch } from '../../services/api';
+import { ACTIVE_VISITORS_TITLE, VISITOR_REGISTRATION_TITLE, ADD_NEW_VISITOR_TITLE, VISITOR_REGISTERED_SUCCESS_NOTIFICATION_LABEL, GENERIC_ERROR_NOTIFICATION_LABEL, REGISTER_BUTTON_LABEL, LOADING_VISITORS_LABEL, ERROR_LOADING_VISITORS_LABEL, BACK_BUTTON_LABEL } from '../../constants/constants';
 import VisitantesForm from './visitantes-form';
 import VisitantesTable from './visitantes-table';
 import Modal from '../modal/modal';
 import { Button } from '../form-ui/button';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import useVisitantsForm, { Visitante } from './hooks/useVisitantsForm';
 
-interface Sala {
-    id: number;
-    nome: string;
-}
-
-interface Visitante {
-    id: number;
-    nome: string;
-    cpf: string;
-    sala_destino_id: number;
-    sala_nome: string;
-    data_nascimento?: string;
-    email?: string;
-    data_entrada: string;
-    data_saida?: string;
-}
 
 const VisitantesContainer = () => {
     const { token, loading } = useAuth();
-    const [salas, setSalas] = useState<Sala[]>([]);
-    const [visitantes, setVisitantes] = useState<Visitante[]>([]);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
+    const queryClient = useQueryClient();
 
-    const { register, handleSubmit, clearErrors, formState: { errors, isSubmitting }, reset } = useForm();
+    const salasQuery = useQuery({
+        queryKey: ['salas', token],
+        queryFn: () => apiGet('/salas', token!),
+        enabled: !!token && !loading
+    });
 
-    const fetchSalas = async () => {
-        const data = await apiGet('/salas', token!);
-        setSalas(Array.isArray(data) ? data : []);
-    };
-    const fetchVisitantes = async () => {
-        const data = await apiGet('/visitantes/ativos', token!);
-        setVisitantes(Array.isArray(data) ? data : []);
-    };
+    const visitantesQuery = useQuery({
+        queryKey: ['visitantesAtivos', token],
+        queryFn: () => apiGet('/visitantes/ativos', token!),
+        enabled: !!token && !loading
+    });
 
-    useEffect(() => {
-        if (!loading && token) {
-            fetchVisitantes();
-            fetchSalas();
-        }
-    }, [loading, token]);
+    const { register, handleSubmit, clearErrors, formState: { errors, isSubmitting }, reset, onSubmit, handleOpenModal } = useVisitantsForm({
+        visitantes: (visitantesQuery.data as Visitante[]) || [],
+        setError,
+        setSuccess,
+        modalOpen,
+        setModalOpen,
+        token: token || '',
+    });
 
-    const onSubmit = async (data: any) => {
-        setError('');
-        setSuccess('');
-        const res = await apiPost('/visitantes', data, token!);
-        if (res.error) {
-            setError(res.error);
-        } else {
-            setSuccess('Visitante cadastrado!');
-            reset();
-            fetchVisitantes();
-            setModalOpen(false);
-        }
-    };
-    const registrarSaida = async (id: number) => {
+
+    const handleRegisterExit = async (id: number) => {
         await apiPatch(`/visitantes/${id}/saida`, {}, token!);
-        fetchVisitantes();
-    };
-
-    const handleOpenModal = () => {
-        setModalOpen(true);
-        setSuccess('');
-    };
+        queryClient.invalidateQueries({ queryKey: ['visitantesAtivos', token] });
+    }
 
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
                 <Button onClick={handleOpenModal}>
-                    Novo visitante
+                    {ADD_NEW_VISITOR_TITLE}
                 </Button>
             </div>
-            {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
-            {success && <div style={{ color: 'green', marginBottom: 12 }}>{success}</div>}
+            {error && <div style={{ color: 'red', marginBottom: 12 }}>{GENERIC_ERROR_NOTIFICATION_LABEL || error}</div>}
+            {success && <div style={{ color: 'green', marginBottom: 12 }}>{VISITOR_REGISTERED_SUCCESS_NOTIFICATION_LABEL || success}</div>}
             <h3>{ACTIVE_VISITORS_TITLE}</h3>
-            <VisitantesTable visitantes={visitantes} registrarSaida={registrarSaida} />
+            {visitantesQuery.isLoading ? (
+                <div>{LOADING_VISITORS_LABEL}</div>
+            ) : visitantesQuery.isError ? (
+                <div>{ERROR_LOADING_VISITORS_LABEL}</div>
+            ) : (
+                <VisitantesTable visitantes={visitantesQuery.data || []} registrarSaida={handleRegisterExit} />
+            )}
             {modalOpen && (
                 <Modal
                     open={modalOpen}
@@ -95,22 +71,22 @@ const VisitantesContainer = () => {
                         setError('');
                         setSuccess('');
                     }}
-                    title="Novo visitante"
+                    title={VISITOR_REGISTRATION_TITLE}
                     footer={
                         <>
-                            <button type="button" onClick={() => {
+                            <Button variant="danger" type="button" onClick={() => {
                                 setModalOpen(false);
                                 reset();
                                 clearErrors();
                                 setError('');
                                 setSuccess('');
-                            }} style={{ background: '#d33', color: '#fff', border: 'none', borderRadius: 4, padding: '8px 20px', fontWeight: 500, cursor: 'pointer' }}>Voltar</button>
-                            <button type="submit" onClick={handleSubmit(onSubmit)} form="visitantes-form" style={{ background: '#0070f3', color: '#fff', border: 'none', borderRadius: 4, padding: '8px 20px', fontWeight: 500, cursor: 'pointer' }} disabled={isSubmitting || loading}>Cadastrar</button>
+                            }}>{BACK_BUTTON_LABEL}</Button>
+                            <Button type="submit" onClick={handleSubmit(onSubmit)} form="visitantes-form" disabled={isSubmitting || loading}>{REGISTER_BUTTON_LABEL}</Button>
                         </>
                     }
                 >
                     <VisitantesForm
-                        salas={salas}
+                        salas={salasQuery.data || []}
                         onSubmit={handleSubmit(onSubmit)}
                         loading={loading}
                         isSubmitting={isSubmitting}

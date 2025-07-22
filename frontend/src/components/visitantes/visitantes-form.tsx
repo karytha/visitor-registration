@@ -1,9 +1,8 @@
 import { FieldError, FieldErrors, UseFormRegister } from 'react-hook-form';
 import { FormInput } from '../../components/form-ui/input';
-import { FormSelect } from '../../components/form-ui/FormSelect';
-import { Button } from '../../components/form-ui/button';
+import { FormSelect } from '../form-ui/select';
 import { Form } from './visitantes-styles';
-import { NAME_REQUIRED_NOTIFICATION_LABEL, CPF_LABEL, CPF_REQUIRED_NOTIFICATION_LABEL, ROOM_LABEL, ROOM_REQUIRED_NOTIFICATION_LABEL, BIRTHDATE_LABEL, EMAIL_LABEL, REGISTER_BUTTON_LOADING_LABEL, REGISTER_BUTTON_LABEL } from '../../constants/constants';
+import { NAME_REQUIRED_NOTIFICATION_LABEL, CPF_LABEL, CPF_REQUIRED_NOTIFICATION_LABEL, ROOM_LABEL, ROOM_REQUIRED_NOTIFICATION_LABEL, BIRTHDATE_LABEL, EMAIL_LABEL } from '../../constants/constants';
 
 interface Sala {
     id: number;

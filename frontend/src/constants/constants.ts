@@ -43,12 +43,22 @@ export const LOGIN_SUBMIT_LABEL = 'Entrar';
 export const LOGIN_SUBMIT_LOADING_LABEL = 'Entrando...';
 export const REGISTER_BUTTON_LABEL = 'Cadastrar';
 export const REGISTER_BUTTON_LOADING_LABEL = 'Salvando...';
+export const ADD_NEW_VISITOR_TITLE = 'Adicionar Visitante';
+
+export const LOADING_VISITORS_LABEL = 'Carregando visitantes...';
+export const ERROR_LOADING_VISITORS_LABEL = 'Erro ao carregar visitantes';
+export const BACK_BUTTON_LABEL = 'Voltar';
 
 export const INVALID_LOGIN_NOTIFICATION_LABEL = 'E-mail ou senha inválidos';
 export const VISITOR_REGISTERED_SUCCESS_NOTIFICATION_LABEL = 'Visitante cadastrado!';
 export const ROOM_REGISTERED_SUCCESS_NOTIFICATION_LABEL = 'Sala cadastrada!';
 export const GENERIC_ERROR_NOTIFICATION_LABEL = 'Ocorreu um erro. Tente novamente.';
+export const EMAIL_INVALID_NOTIFICATION_LABEL = 'E-mail inválido';
+export const CPF_INVALID_NOTIFICATION_LABEL = 'CPF inválido';
 
+export const LOADING_ROOMS_LABEL = 'Carregando salas...';
+export const ERROR_LOADING_ROOMS_LABEL = 'Erro ao carregar salas';
+export const NEW_ROOM_LABEL = 'Nova sala';
 export const NAME_REQUIRED_NOTIFICATION_LABEL = 'Nome obrigatório';
 export const CPF_REQUIRED_NOTIFICATION_LABEL = 'CPF obrigatório';
 export const ROOM_REQUIRED_NOTIFICATION_LABEL = 'Sala obrigatória';

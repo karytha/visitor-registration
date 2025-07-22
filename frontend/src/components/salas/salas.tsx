@@ -1,75 +1,69 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { apiGet, apiPost } from '../../services/api';
-import { useForm, FieldError } from 'react-hook-form';
+import { apiGet } from '../../services/api';
+import { FieldError } from 'react-hook-form';
 import { FormInput } from '../../components/form-ui/input';
 import { Button } from '../../components/form-ui/button';
-import { NAME_ROOM_LABEL, REGISTERED_ROOMS_TITLE, REGISTER_BUTTON_LABEL, REGISTER_BUTTON_LOADING_LABEL } from '../../constants/constants';
+import { NAME_ROOM_LABEL, REGISTERED_ROOMS_TITLE, BACK_BUTTON_LABEL, REGISTER_BUTTON_LABEL, REGISTER_BUTTON_LOADING_LABEL, LOADING_ROOMS_LABEL, ERROR_LOADING_ROOMS_LABEL, NEW_ROOM_LABEL, NAME_REQUIRED_NOTIFICATION_LABEL } from '../../constants/constants';
 import SalasTable from './salas-table';
 import { Form, ErrorMsg, SuccessMsg } from './salas-styles';
 import Modal from '../modal/modal';
-
-interface Sala {
-    id: number;
-    nome: string;
-}
+import { useQuery } from '@tanstack/react-query';
+import useSalasForm from './hooks/useSalasForm';
 
 const SalasContainer = () => {
     const { token } = useAuth();
-    const [salas, setSalas] = useState<Sala[]>([]);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
 
-    const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
+    const salasQuery = useQuery({
+        queryKey: ['salas', token],
+        queryFn: () => apiGet('/salas', token!),
+        enabled: !!token
+    });
 
-    const fetchSalas = async () => {
-        const data = await apiGet('/salas', token!);
-        setSalas(data);
-    };
-
-    useEffect(() => {
-        if (!loading && token) {
-            fetchSalas();
-        }
-    }, [loading, token]);
-
-    const onSubmit = async (data: any) => {
-        setError('');
-        setSuccess('');
-        setLoading(true);
-        const res = await apiPost('/salas', { nome: data.nome }, token!);
-        setLoading(false);
-        if (res.error) {
-            setError(res.error);
-        } else {
-            setSuccess('Sala cadastrada!');
-            reset();
-            fetchSalas();
-            setModalOpen(false);
-        }
-    };
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+        reset,
+        onSubmit
+    } = useSalasForm({
+        setError,
+        setSuccess,
+        setLoading,
+        modalOpen,
+        setModalOpen,
+        token: token || ''
+    });
 
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
                 <Button onClick={() => setModalOpen(true)}>
-                    Nova sala
+                    {NEW_ROOM_LABEL}
                 </Button>
             </div>
             {error && <ErrorMsg>{error}</ErrorMsg>}
             {success && <SuccessMsg>{success}</SuccessMsg>}
             <h3>{REGISTERED_ROOMS_TITLE}</h3>
-            <SalasTable salas={salas} />
+            {salasQuery.isLoading ? (
+                <div>{LOADING_ROOMS_LABEL}</div>
+            ) : salasQuery.isError ? (
+                <div>{ERROR_LOADING_ROOMS_LABEL}</div>
+            ) : (
+                <SalasTable salas={salasQuery.data || []} />
+            )}
             {modalOpen && (
                 <Modal
                     open={modalOpen}
                     onClose={() => setModalOpen(false)}
-                    title="Nova sala"
+                    title={NEW_ROOM_LABEL}
                     footer={
                         <>
-                            <button type="button" onClick={() => setModalOpen(false)} style={{ background: '#d33', color: '#fff', border: 'none', borderRadius: 4, padding: '8px 20px', fontWeight: 500, cursor: 'pointer' }}>Voltar</button>
+                            <Button type="button" variant="danger" onClick={() => setModalOpen(false)}>{BACK_BUTTON_LABEL}</Button>
                             <Button type="submit" form="sala-form" disabled={isSubmitting || loading}>
                                 {isSubmitting || loading ? REGISTER_BUTTON_LOADING_LABEL : REGISTER_BUTTON_LABEL}
                             </Button>
@@ -80,7 +74,7 @@ const SalasContainer = () => {
                         <FormInput
                             label={NAME_ROOM_LABEL}
                             placeholder={NAME_ROOM_LABEL}
-                            register={register("nome", { required: "Nome obrigatório" })}
+                            register={register("nome", { required: NAME_REQUIRED_NOTIFICATION_LABEL })}
                             error={errors.nome as FieldError | undefined}
                         />
                     </Form>
