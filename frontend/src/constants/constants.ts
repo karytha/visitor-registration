@@ -4,7 +4,7 @@ export const HISTORY_ROUTE_LABEL = 'historico';
 export const LOGIN_ROUTE_LABEL = 'login';
 export const ROOMS_ROUTE_LABEL = 'salas'
 export const LOGS_ROUTE_LABEL = 'logs';
-export const HOME_ROUTE_LABEL = '/'
+export const HOME_ROUTE_LABEL = ''
 
 // SIDEBAR LABELS
 export const HOME_LABEL = 'Dashboard';
@@ -17,6 +17,7 @@ export const LOGOUT_LABEL = 'Sair';
 // TABLE LABELS
 export const NAME_LABEL = 'Nome';
 export const ROOM_LABEL = 'Sala';
+export const NAME_ROOM_LABEL = 'Nome da sala'
 export const CPF_LABEL = 'CPF';
 export const ENTRY_DATE_LABEL = 'Data Entrada';
 export const EXIT_DATE_LABEL = 'Data Saída';
@@ -25,6 +26,7 @@ export const EMAIL_PLACEHOLDER = 'Digite seu e-mail';
 export const PASSWORD_LABEL = 'Senha';
 export const PASSWORD_PLACEHOLDER = 'Digite sua senha';
 export const BIRTHDATE_LABEL = 'Data Nasc.';
+export const ID_LABEL = 'ID';
 
 // SECTION TITLES
 export const LOGIN_TITLE = 'Bem-vindo!';
@@ -55,5 +57,10 @@ export const EXIT_DATE_REQUIRED_NOTIFICATION_LABEL = 'Data de saída obrigatóri
 export const EMAIL_REQUIRED_NOTIFICATION_LABEL = 'Email obrigatório';
 export const BIRTHDATE_REQUIRED_NOTIFICATION_LABEL = 'Data de nascimento obrigatória';
 export const PASSWORD_REQUIRED_NOTIFICATION_LABEL = 'Senha obrigatória';
+
+export const LOG_DATE_LABEL = 'Data';
+export const LOG_ACTION_LABEL = 'Ação';
+export const LOG_USER_LABEL = 'Usuário';
+export const LOG_EMAIL_LABEL = 'Email';
 
 
