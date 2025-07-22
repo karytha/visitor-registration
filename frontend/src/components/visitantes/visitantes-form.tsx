@@ -34,9 +34,11 @@ const VisitantesForm: React.FC<VisitantesFormProps> = ({
             />
             <FormInput
                 label={CPF_LABEL}
-                placeholder="CPF*"
-                register={register("cpf", { required: CPF_REQUIRED_NOTIFICATION_LABEL })}
+                type="text"
+                placeholder="000.000.000-00"
+                register={register('cpf')}
                 error={errors.cpf as FieldError | undefined}
+                mask="cpf"
             />
             <FormSelect
                 label={ROOM_LABEL}

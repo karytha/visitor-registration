@@ -1,5 +1,23 @@
 @import 'react-toastify/dist/ReactToastify.css';
 
+/* Toastify custom styles */
+.Toastify__toast--success {
+  background: #2ecc406f !important;
+  /* Verde */
+  color: #fff !important;
+}
+
+.Toastify__toast--error {
+  background: #e74d3c5d !important;
+  /* Vermelho */
+  color: #fff !important;
+}
+
+.Toastify__toast {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
