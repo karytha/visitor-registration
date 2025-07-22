@@ -36,12 +36,12 @@ const useVisitantsForm = ({ visitantes, setError, setSuccess, modalOpen, setModa
 
     const onSubmit = async (data: any) => {
         setError('');
-        setSuccess('');
         const res = await apiPost('/visitantes', data, token!);
         if (res.error) {
             setError(res.error);
+            toast.error(res.error);
         } else {
-            setSuccess('Visitante cadastrado!');
+            toast.success(VISITOR_REGISTERED_SUCCESS_NOTIFICATION_LABEL);
             reset();
             queryClient.invalidateQueries({ queryKey: ['visitantesAtivos', token] });
             setModalOpen(false);

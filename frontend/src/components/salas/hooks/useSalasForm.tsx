@@ -4,6 +4,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { NAME_REQUIRED_NOTIFICATION_LABEL } from '../../../constants/constants';
+import { toast } from 'react-toastify';
+import { ROOM_REGISTERED_SUCCESS_NOTIFICATION_LABEL } from '../../../constants/constants';
 
 export interface Sala {
     id: number;
@@ -31,14 +33,15 @@ const useSalasForm = ({ setError, setSuccess, setLoading, modalOpen, setModalOpe
 
     const onSubmit = async (data: any) => {
         setError('');
-        setSuccess('');
         setLoading(true);
         const res = await apiPost('/salas', { nome: data.nome }, token!);
         setLoading(false);
         if (res.error) {
             setError(res.error);
+            toast.error(res.error);
         } else {
-            setSuccess('Sala cadastrada!');
+            setSuccess(ROOM_REGISTERED_SUCCESS_NOTIFICATION_LABEL);
+            toast.success(ROOM_REGISTERED_SUCCESS_NOTIFICATION_LABEL);
             reset();
             queryClient.invalidateQueries({ queryKey: ['salas', token] });
             setModalOpen(false);
