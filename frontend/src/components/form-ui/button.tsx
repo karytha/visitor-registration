@@ -14,16 +14,16 @@ const StyledButton = styled.button<{
   max-height: fit-content;
   transition: background 0.2s, color 0.2s;
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
-  color: #fff;
+  color: #000000;
   background: ${({ variant }) =>
     variant === 'danger' ? '#d33' :
-    variant === 'secondary' ? '#666' :
-    '#0070f3'};
+      variant === 'secondary' ? '#666' :
+        '#00eaff'};
   &:hover {
     background: ${({ variant }) =>
-      variant === 'danger' ? '#a00' :
+    variant === 'danger' ? '#a00' :
       variant === 'secondary' ? '#444' :
-      '#005bb5'};
+        '#00eaff'};
   }
   &:disabled {
     background: #ccc;

@@ -1,6 +1,6 @@
-import { Layout, Sidebar, SidebarLink, Content, Header, SairButton } from './sidebar-styles';
+import { Layout, Sidebar, SidebarLink, Content, Header, SairButton, SairButtonIcon } from './sidebar-styles';
 import { useAuth } from '@/contexts/AuthContext';
-import { FiUsers, FiClock, FiHome, FiList, FiAirplay } from "react-icons/fi";
+import { FiUsers, FiClock, FiHome, FiList, FiAirplay, FiLogOut } from "react-icons/fi";
 import { VISITORS_ROUTE_LABEL, ROOMS_ROUTE_LABEL, HOME_ROUTE_LABEL, LOGS_ROUTE_LABEL, LOGIN_ROUTE_LABEL, HISTORY_ROUTE_LABEL, HOME_LABEL, VISITORS_LABEL, HISTORY_LABEL, ROOMS_LABEL, LOGS_LABEL, LOGOUT_LABEL } from '../../constants/constants'
 
 export default function SidebarLayout({ children }: { children: React.ReactNode }) {
@@ -36,7 +36,8 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
             </Sidebar>
             <Content>
                 <Header style={{ justifyContent: 'end' }}>
-                    <SairButton onClick={logout}>{LOGOUT_LABEL}</SairButton>
+                        {LOGOUT_LABEL}
+                        <SairButtonIcon onClick={logout} />
                 </Header>
                 <hr style={{ margin: '24px 0' }} />
                 {children}

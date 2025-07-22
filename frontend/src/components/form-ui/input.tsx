@@ -11,15 +11,16 @@ const Label = styled.label`
   font-weight: 500;
   display: block;
   margin-bottom: 4px;
+  color: #00eaff;
 `;
 
 const InputStyle = styled.input.withConfig({
-    shouldForwardProp: (prop) => prop !== 'hasError'
+  shouldForwardProp: (prop) => prop !== 'hasError'
 }) <{ hasError?: boolean }>`
   width: 100%;
   padding: 8px;
   border-radius: 4px;
-  border: 1px solid ${({ hasError }) => (hasError ? "#d33" : "#ccc")};
+  border: 1px solid ${({ hasError }) => (hasError ? "#d33" : '#00eaff')};
   font-size: 1rem;
   &:focus {
     outline: 2px solid #0070f3;
@@ -35,25 +36,25 @@ const ErrorMsg = styled.span`
 `;
 
 type FormInputProps = {
-    label: string;
-    type?: string;
-    register: UseFormRegisterReturn;
-    error?: FieldError;
-    [x: string]: any; // para outros props como placeholder, etc
+  label: string;
+  type?: string;
+  register: UseFormRegisterReturn;
+  error?: FieldError;
+  [x: string]: any;
 };
 
 export const FormInput: React.FC<FormInputProps> = ({
-    label,
-    type = "text",
-    register,
-    error,
-    ...rest
+  label,
+  type = "text",
+  register,
+  error,
+  ...rest
 }) => (
-    <InputWrapper>
-        <Label>
-            {label}
-            <InputStyle type={type} {...register} hasError={!!error} {...rest} />
-        </Label>
-        {error && <ErrorMsg>{error.message}</ErrorMsg>}
-    </InputWrapper>
+  <InputWrapper>
+    <Label>
+      {label}
+      <InputStyle type={type} {...register} hasError={!!error} {...rest} />
+    </Label>
+    {error && <ErrorMsg>{error.message}</ErrorMsg>}
+  </InputWrapper>
 );

@@ -1,5 +1,16 @@
+'use client'
 import styled from 'styled-components';
 import backgroundLogin from '../../assets/jarvis-background.png';
+import { createGlobalStyle } from 'styled-components';
+
+export const TitleGlobalStyle = createGlobalStyle`
+  h1, h2, h3 {
+    color: #29d6ff;
+    text-shadow: 0 0 8px #29d6ff55, 0 0 2px #fff;
+    letter-spacing: 2px;
+    font-weight: 700;
+  }
+`;
 
 export const LoginContainer = styled.div`
   min-width: 400px;
@@ -58,4 +69,14 @@ export const LoginButton = styled.button`
   cursor: pointer;
   transition: background 0.2s;
   &:hover { background: #005bb5; }
+`;
+
+export const LoginTitle = styled.h2`
+  color: #29d6ff;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px #29d6ff55, 0 0 2px #fff;
 `;

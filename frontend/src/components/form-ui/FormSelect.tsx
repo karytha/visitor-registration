@@ -10,6 +10,7 @@ const Label = styled.label`
   font-weight: 500;
   display: block;
   margin-bottom: 4px;
+  color: #00eaff;
 `;
 
 const Select = styled.select.withConfig({
@@ -18,7 +19,7 @@ const Select = styled.select.withConfig({
   width: 100%;
   padding: 8px;
   border-radius: 4px;
-  border: 1px solid ${({ hasError }) => (hasError ? "#d33" : "#ccc")};
+  border: 1px solid ${({ hasError }) => (hasError ? "#d33" : '#00eaff')};
   font-size: 1rem;
   &:focus {
     outline: 2px solid #0070f3;
@@ -65,4 +66,4 @@ export const FormSelect: React.FC<FormSelectProps> = ({
     </Label>
     {error && <ErrorMsg>{error.message}</ErrorMsg>}
   </SelectWrapper>
-); 
+);

@@ -22,8 +22,6 @@ interface VisitantesFormProps {
 const VisitantesForm: React.FC<VisitantesFormProps> = ({
     salas,
     onSubmit,
-    loading,
-    isSubmitting,
     errors,
     register
 }) => {
@@ -59,9 +57,6 @@ const VisitantesForm: React.FC<VisitantesFormProps> = ({
                 register={register("email")}
                 error={errors.email as FieldError | undefined}
             />
-            <Button type="submit" disabled={isSubmitting || loading}>
-                {isSubmitting || loading ? REGISTER_BUTTON_LOADING_LABEL : REGISTER_BUTTON_LABEL}
-            </Button>
         </Form>
     );
 };
