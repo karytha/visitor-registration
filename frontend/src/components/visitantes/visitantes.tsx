@@ -6,6 +6,7 @@ import { ACTIVE_VISITORS_TITLE } from '../../constants/constants';
 import VisitantesForm from './visitantes-form';
 import VisitantesTable from './visitantes-table';
 import Modal from '../modal/modal';
+import { Button } from '../form-ui/button';
 
 interface Sala {
     id: number;
@@ -76,9 +77,9 @@ const VisitantesContainer = () => {
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
-                <button onClick={() => setModalOpen(true)} style={{ background: '#0070f3', color: '#fff', border: 'none', borderRadius: 4, padding: '8px 20px', fontWeight: 500, cursor: 'pointer' }}>
+                <Button onClick={handleOpenModal}>
                     Novo visitante
-                </button>
+                </Button>
             </div>
             {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
             {success && <div style={{ color: 'green', marginBottom: 12 }}>{success}</div>}
