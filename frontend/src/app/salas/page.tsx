@@ -4,6 +4,9 @@ import { useAuth } from '../../contexts/AuthContext';
 import { apiGet, apiPost } from '../../services/api';
 import styled from 'styled-components';
 import MasterContainer from '../../components/master-container/master-container';
+import { useForm, FieldError } from 'react-hook-form';
+import { FormInput } from '../../components/form-ui/input';
+import { Button } from '../../components/form-ui/button';
 
 const Form = styled.form`
   display: flex;
@@ -27,10 +30,11 @@ interface Sala {
 export default function SalasPage() {
   const { token } = useAuth();
   const [salas, setSalas] = useState<Sala[]>([]);
-  const [nome, setNome] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
 
   const fetchSalas = async () => {
     const data = await apiGet('/salas', token!);
@@ -43,18 +47,17 @@ export default function SalasPage() {
     }
   }, [loading, token]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: any) => {
     setError('');
     setSuccess('');
     setLoading(true);
-    const res = await apiPost('/salas', { nome }, token!);
+    const res = await apiPost('/salas', { nome: data.nome }, token!);
     setLoading(false);
     if (res.error) {
       setError(res.error);
     } else {
       setSuccess('Sala cadastrada!');
-      setNome('');
+      reset();
       fetchSalas();
     }
   };
@@ -62,9 +65,19 @@ export default function SalasPage() {
   return (
     <MasterContainer>
       <h2>Cadastro de Sala</h2>
-      <Form onSubmit={handleSubmit}>
-        <input name="nome" placeholder="Nome da sala" value={nome} onChange={e => setNome(e.target.value)} required style={{ flex: 2 }} />
-        <button type="submit" disabled={loading} style={{ flex: 1, minWidth: 120 }}>{loading ? 'Salvando...' : 'Cadastrar'}</button>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+        <FormInput
+          label="Nome da sala"
+          placeholder="Nome da sala"
+          register={register("nome", { required: "Nome obrigatório" })}
+          error={errors.nome as FieldError | undefined}
+        />
+     
+        <Button type="submit" disabled={isSubmitting || loading}>
+          {isSubmitting || loading ? 'Salvando...' : 'Cadastrar'}
+        </Button>
+        </div>
       </Form>
       {error && <ErrorMsg>{error}</ErrorMsg>}
       {success && <SuccessMsg>{success}</SuccessMsg>}

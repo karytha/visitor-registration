@@ -4,6 +4,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import { apiGet, apiPost, apiPatch } from '../../services/api';
 import styled from 'styled-components';
 import MasterContainer from '../../components/master-container/master-container';
+import { useForm, FieldError } from 'react-hook-form';
+import { FormInput } from '../../components/form-ui/input';
+import { FormSelect } from '../../components/form-ui/FormSelect';
+import { Button } from '../../components/form-ui/button';
 
 const Form = styled.form`
   display: flex;
@@ -11,14 +15,7 @@ const Form = styled.form`
   flex-wrap: wrap;
   margin-bottom: 24px;
 `;
-const ErrorMsg = styled.div`
-  color: #d33;
-  margin-bottom: 12px;
-`;
-const SuccessMsg = styled.div`
-  color: #0a0;
-  margin-bottom: 12px;
-`;
+
 const SaidaButton = styled.button`
   color: #fff;
   background: #d33;
@@ -51,9 +48,10 @@ export default function VisitantesPage() {
   const { token, loading } = useAuth();
   const [salas, setSalas] = useState<Sala[]>([]);
   const [visitantes, setVisitantes] = useState<Visitante[]>([]);
-  const [form, setForm] = useState({ nome: '', cpf: '', sala_destino_id: '', data_nascimento: '', email: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
 
   const fetchSalas = async () => {
     const data = await apiGet('/salas', token!);
@@ -71,25 +69,20 @@ export default function VisitantesPage() {
     }
   }, [loading, token]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: any) => {
     setError('');
     setSuccess('');
     const res = await apiPost('/visitantes', {
-      ...form,
-      sala_destino_id: Number(form.sala_destino_id) || undefined,
-      data_nascimento: form.data_nascimento || undefined,
-      email: form.email || undefined
+      ...data,
+      sala_destino_id: Number(data.sala_destino_id) || undefined,
+      data_nascimento: data.data_nascimento || undefined,
+      email: data.email || undefined
     }, token!);
     if (res.error) {
       setError(res.error);
     } else {
       setSuccess('Visitante cadastrado!');
-      setForm({ nome: '', cpf: '', sala_destino_id: '', data_nascimento: '', email: '' });
+      reset();
       fetchVisitantes();
     }
   };
@@ -102,19 +95,43 @@ export default function VisitantesPage() {
   return (
     <MasterContainer>
       <h2>Cadastro de Visitante</h2>
-      <Form onSubmit={handleSubmit}>
-        <input name="nome" placeholder="Nome*" value={form.nome} onChange={handleChange} required style={{ flex: 2 }} />
-        <input name="cpf" placeholder="CPF*" value={form.cpf} onChange={handleChange} required style={{ flex: 1 }} />
-        <select name="sala_destino_id" value={form.sala_destino_id} onChange={handleChange} required style={{ flex: 1 }}>
-          <option value="">Sala destino*</option>
-          {salas.map(s => <option key={s.id} value={s.id}>{s.nome}</option>)}
-        </select>
-        <input name="data_nascimento" type="date" placeholder="Data de nascimento" value={form.data_nascimento} onChange={handleChange} style={{ flex: 1 }} />
-        <input name="email" type="email" placeholder="E-mail" value={form.email} onChange={handleChange} style={{ flex: 2 }} />
-        <button type="submit" disabled={loading} style={{ flex: 1, minWidth: 120 }}>{loading ? 'Salvando...' : 'Cadastrar'}</button>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <FormInput
+          label="Nome"
+          placeholder="Nome*"
+          register={register("nome", { required: "Nome obrigatório" })}
+          error={errors.nome as FieldError | undefined}
+        />
+        <FormInput
+          label="CPF"
+          placeholder="CPF*"
+          register={register("cpf", { required: "CPF obrigatório" })}
+          error={errors.cpf as FieldError | undefined}
+        />
+        <FormSelect
+          label="Sala destino*"
+          options={salas.map((s: any) => ({ value: s.id, label: s.nome }))}
+          register={register("sala_destino_id", { required: "Sala obrigatória" })}
+          error={errors.sala_destino_id as FieldError | undefined}
+        />
+        <FormInput
+          label="Data de nascimento"
+          type="date"
+          register={register("data_nascimento")}
+          error={errors.data_nascimento as FieldError | undefined}
+        />
+        <FormInput
+          label="E-mail"
+          type="email"
+          register={register("email")}
+          error={errors.email as FieldError | undefined}
+        />
+        <Button type="submit" disabled={isSubmitting || loading} style={{ minWidth: 120 }}>
+          {isSubmitting || loading ? 'Salvando...' : 'Cadastrar'}
+        </Button>
       </Form>
-      {error && <ErrorMsg>{error}</ErrorMsg>}
-      {success && <SuccessMsg>{success}</SuccessMsg>}
+      {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
+      {success && <div style={{ color: 'green', marginBottom: 12 }}>{success}</div>}
       <h3>Visitantes Ativos</h3>
       <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 12 }}>
         <thead>

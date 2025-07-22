@@ -15,7 +15,9 @@ export const Sidebar = styled.nav`
   border-right: 1px solid #eaeaea;
   align-items: flex-start;
 `;
-export const SidebarLink = styled(Link)`
+export const SidebarLink = styled(Link).withConfig({
+  shouldForwardProp: (prop) => prop !== 'isActive'
+}) <{ isActive?: boolean }>`
   padding: 10px 24px;
   color: #222;
   text-decoration: none;
@@ -23,6 +25,8 @@ export const SidebarLink = styled(Link)`
   font-weight: 500;
   width: 100%;
   transition: background 0.2s;
+  background: ${({ isActive }) => isActive ? '#e6f0fa' : 'transparent'};
+  color: ${({ isActive }) => isActive ? '#0070f3' : '#222'};
   &:hover {
     background: #e6f0fa;
     color: #0070f3;
