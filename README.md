@@ -6,7 +6,14 @@
    ```bash
    npm install
    ```
-
+ ```bash
+   cd frontend
+   npm install
+   ```
+ ```bash
+   cd backend
+   npm install
+   ```
 2. Rode backend e frontend juntos:
    ```bash
    npm run dev
@@ -38,7 +45,15 @@
 ## How to run the project
 
 1. Install dependencies in the project root:
-   ```bash
+```bash
+   npm install
+```
+ ```bash
+   cd frontend
+   npm install
+   ```
+ ```bash
+   cd backend
    npm install
    ```
 
