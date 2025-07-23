@@ -5,6 +5,11 @@ const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const app = express();
 app.use(cors());
@@ -105,6 +110,8 @@ app.post('/visitantes', authMiddleware, (req, res) => {
     if (!nome || !cpf || !sala_destino_id) {
         return res.status(400).json({ error: 'Nome, CPF e sala_destino_id são obrigatórios' });
     }
+    const tz = req.headers['x-timezone'] || 'America/Sao_Paulo';
+    const dataEntrada = dayjs().tz(tz).format('YYYY-MM-DD HH:mm:ss');
     db.get(
         'SELECT COUNT(*) as total FROM Visitante WHERE sala_destino_id = ? AND data_saida IS NULL',
         [sala_destino_id],
@@ -121,8 +128,8 @@ app.post('/visitantes', authMiddleware, (req, res) => {
                         return res.status(400).json({ error: 'Já existe um visitante ativo com esse CPF' });
                     }
                     db.run(
-                        'INSERT INTO Visitante (nome, cpf, sala_destino_id, data_nascimento, email) VALUES (?, ?, ?, ?, ?)',
-                        [nome, cpf, sala_destino_id, data_nascimento || null, email || null],
+                        'INSERT INTO Visitante (nome, cpf, sala_destino_id, data_nascimento, email, data_entrada) VALUES (?, ?, ?, ?, ?, ?)',
+                        [nome, cpf, sala_destino_id, data_nascimento || null, email || null, dataEntrada],
                         function (err) {
                             if (err) return res.status(500).json({ error: 'Erro ao cadastrar visitante' });
                             registrarLog(req.user.id, `Cadastrou visitante: ${nome} (CPF: ${cpf}) na sala ${sala_destino_id}`);
