@@ -6,11 +6,11 @@
    ```bash
    npm install
    ```
- ```bash
+   ```bash
    cd frontend
    npm install
    ```
- ```bash
+   ```bash
    cd backend
    npm install
    ```
@@ -45,14 +45,14 @@
 ## How to run the project
 
 1. Install dependencies in the project root:
-```bash
-   npm install
-```
- ```bash
+   ```bash
+      npm install
+   ```
+   ```bash
    cd frontend
    npm install
    ```
- ```bash
+   ```bash
    cd backend
    npm install
    ```
